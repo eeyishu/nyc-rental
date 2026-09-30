@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="An offline course prototype for international students exploring rental options near Columbia University.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src data:; connect-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>NYC Rental Navigator for International Students</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%231c426e'/%3E%3Ctext x='20' y='29' text-anchor='middle' font-family='Arial' font-size='27' font-weight='bold' fill='white'%3EN%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+  <script src="data.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <header class="site-header">
+    <div class="shell header-inner">
+      <div class="brand"><span class="brand-mark" aria-hidden="true">N<span>↗</span></span><div><h1>NYC Rental Navigator</h1><p>For international students <span class="header-divider">/</span> Columbia University</p></div></div>
+      <span class="project-label">NON-COMMERCIAL · COURSE PROTOTYPE</span>
+    </div>
+  </header>
+  <div class="shell">
+    <aside class="prototype-banner"><span class="info-icon" aria-hidden="true">i</span><p id="prototype-copy"></p></aside>
+    <nav class="tab-nav" aria-label="Rental tools"><div role="tablist" aria-label="Rental tools">
+      <button id="tab-find" type="button" role="tab" aria-selected="true" aria-controls="panel-find" data-tab="find"><span class="tab-icon" aria-hidden="true">⌂</span> Find a place</button>
+      <button id="tab-deal" type="button" role="tab" aria-selected="false" aria-controls="panel-deal" data-tab="deal" tabindex="-1"><span class="tab-icon" aria-hidden="true">↔</span> Deal check</button>
+      <button id="tab-apply" type="button" role="tab" aria-selected="false" aria-controls="panel-apply" data-tab="apply" tabindex="-1"><span class="tab-icon" aria-hidden="true">✓</span> Can I apply?</button>
+    </div></nav>
+    <main id="main-content" tabindex="-1">
+      <section id="panel-find" role="tabpanel" aria-labelledby="tab-find">
+        <div class="section-heading"><div><p class="eyebrow">YOUR SEARCH STARTS HERE</p><h2>Find a place that fits.</h2><p>Compare neighborhoods, set your budget, and explore sample rentals.</p></div><span class="pill neutral">Destination: Columbia University</span></div>
+        <section class="map-section" aria-labelledby="map-heading">
+          <div class="subsection-heading"><div><p class="eyebrow">SEE THE BIGGER PICTURE</p><h3 id="map-heading" tabindex="-1">Your campus. Your neighborhood.</h3><p>Choose an area on the map to explore the listings below.</p></div><span class="pill neutral map-offline">Offline area map</span></div>
+          <div class="map-explorer surface">
+            <div class="map-canvas" id="map-canvas">
+              <div id="map-artwork" class="map-artwork"></div>
+              <div class="campus-key"><span aria-hidden="true">★</span><div><strong>Columbia University</strong><span>Your destination</span></div></div>
+              <div class="map-compass" aria-hidden="true"><span>N</span>↑</div>
+              <div id="map-markers" class="map-markers" role="group" aria-label="Select neighborhoods on the map"></div>
+              <div class="map-key"><span><i aria-hidden="true"></i> Area / starting rent</span><span><i class="selected-key" aria-hidden="true"></i> Selected</span></div>
+            </div>
+            <aside class="map-detail" aria-labelledby="map-detail-title"><div id="map-detail-content" aria-live="polite"></div></aside>
+          </div>
+          <div id="map-mobile-legend" class="map-mobile-legend" role="group" aria-label="Map neighborhoods"></div>
+          <div class="map-caption"><p id="map-source"></p><button type="button" id="clear-map-selection" class="text-button" hidden>Clear area selection</button></div>
+          <p id="map-announcement" class="sr-only" role="status"></p>
+        </section>
+        <section class="filters surface" aria-label="Listing filters">
+          <div class="budget-filter"><label for="budget-number">Max monthly rent</label><div class="money-field compact"><span aria-hidden="true">$</span><input id="budget-number" type="number" inputmode="decimal" aria-describedby="budget-error"></div><input id="budget-range" type="range" aria-label="Max monthly rent slider"><div class="range-labels"><span id="budget-min"></span><span id="budget-max"></span></div><p class="error" id="budget-error" hidden></p></div>
+          <fieldset><legend>Unit type</legend><div class="choice-row" id="unit-filters"></div><p class="helper">Select any combination.</p></fieldset>
+          <fieldset><legend>Source channel</legend><div class="source-options" id="source-filters"></div></fieldset>
+          <div class="filter-sort"><label for="sort-select">Sort listings</label><select id="sort-select"><option value="rent">Rent: low to high</option><option value="commute">Commute: short to long</option></select><button type="button" class="text-button" id="clear-filters">Clear filters</button></div>
+        </section>
+        <section class="listings-section" aria-labelledby="listings-heading">
+          <div class="subsection-heading"><div><p class="eyebrow">EXPLORE YOUR OPTIONS</p><h3 id="listings-heading" tabindex="-1">Sample listings <span id="result-count" class="count-pill" aria-live="polite"></span></h3><p>Fictional listings for comparison. Every rent shown is for the whole unit.</p></div></div>
+          <div id="listing-grid" class="listing-grid"></div>
+          <div id="empty-state" class="empty-state surface" hidden><span class="empty-symbol" aria-hidden="true">⌕</span><h3>No listings match.</h3><p>Try raising the budget or clearing filters.</p><button type="button" class="button primary" id="empty-clear">Clear filters</button></div>
+        </section>
+        <section class="neighborhood-section" aria-labelledby="neighborhood-heading">
+          <div class="subsection-heading"><div><h3 id="neighborhood-heading">Get to know the neighborhoods</h3><p>Select cards to filter listings. You can choose more than one.</p></div><span id="neighborhood-count" class="small-meta" aria-live="polite"></span></div>
+          <div id="neighborhood-grid" class="neighborhood-grid"></div>
+        </section>
+      </section>
+      <section id="panel-deal" role="tabpanel" aria-labelledby="tab-deal" hidden>
+        <div class="section-heading"><div><p class="eyebrow">PUT THE PRICE IN CONTEXT</p><h2>Is this rent a fair deal?</h2><p>Compare a monthly rent with the neighborhood’s average asking rent.</p></div><span class="pill neutral">Snapshot comparison</span></div>
+        <div class="calculator-layout">
+          <form id="deal-form" class="surface form-card" novalidate>
+            <h3>The place you’re considering</h3><p class="helper">Results update as you make changes.</p>
+            <div class="field"><label for="deal-neighborhood">Neighborhood</label><select id="deal-neighborhood"></select></div>
+            <div class="field"><label for="deal-type">Unit type</label><select id="deal-type"></select></div>
+            <div class="field"><label for="deal-rent">Monthly rent (USD)</label><div class="money-field"><span aria-hidden="true">$</span><input id="deal-rent" type="number" inputmode="decimal" required aria-describedby="deal-error"></div><p class="error" id="deal-error" hidden></p></div>
+            <div class="field"><label for="deal-month">Move-in month <span class="optional">optional</span></label><select id="deal-month"><option value="">Not specified</option></select><p class="helper">Uses an illustrative seasonal factor, not a forecast.</p></div>
+          </form>
+          <div id="deal-result" class="surface deal-result" aria-live="polite" aria-atomic="true"></div>
+        </div>
+        <p class="reference-footnote" id="deal-footnote"></p>
+      </section>
+      <section id="panel-apply" role="tabpanel" aria-labelledby="tab-apply" hidden>
+        <div class="section-heading"><div><p class="eyebrow">PLAN YOUR NEXT STEP</p><h2>Know your options before you apply.</h2><p>Explore sample screening paths, upfront costs, and the documents to prepare.</p></div><span class="pill neutral">Sample rules · Estimates only</span></div>
+        <div class="apply-layout">
+          <form id="apply-form" class="surface form-card" novalidate>
+            <h3>A little about your situation</h3><p class="helper">Your answers stay in memory and reset when you reload.</p>
+            <p id="listing-context" class="context-note" hidden></p>
+            <div class="field"><label for="apply-rent">Monthly rent you’re considering (USD)</label><p class="helper" id="apply-rent-help">Use the full monthly rent for the unit.</p><div class="money-field"><span aria-hidden="true">$</span><input id="apply-rent" type="number" inputmode="decimal" required aria-describedby="apply-rent-help apply-rent-error"></div><p class="error" id="apply-rent-error" hidden></p></div>
+            <fieldset class="field"><legend>Do you have a US Social Security Number?</legend><p class="helper">A US Social Security Number is often used for credit checks.</p><div class="choice-row"><label class="choice"><input type="radio" name="ssn" value="yes"><span>Yes</span></label><label class="choice"><input type="radio" name="ssn" value="no"><span>No</span></label></div></fieldset>
+            <fieldset class="field" id="credit-field"><legend>Do you have a US credit history?</legend><p class="helper" id="credit-help">For this prototype, no SSN means no US credit history.</p><div class="choice-row"><label class="choice"><input type="radio" name="credit" value="none"><span>None</span></label><label class="choice"><input type="radio" name="credit" value="limited"><span>Limited</span></label><label class="choice"><input type="radio" name="credit" value="established"><span>Established</span></label></div></fieldset>
+            <div class="field"><label for="own-income">Your own annual income (USD)</label><p class="helper" id="own-income-help">Enter your annual income before taxes; zero is okay.</p><div class="money-field"><span aria-hidden="true">$</span><input id="own-income" type="number" inputmode="decimal" required aria-describedby="own-income-help own-income-error"></div><div class="quick-picks" id="own-quick-picks" aria-label="Annual income quick picks"></div><p class="error" id="own-income-error" hidden></p></div>
+            <fieldset class="field"><legend>Do you have a US-based guarantor?</legend><p class="helper">A guarantor agrees to cover rent if you cannot pay.</p><div class="choice-row"><label class="choice"><input type="radio" name="guarantor" value="yes"><span>Yes</span></label><label class="choice"><input type="radio" name="guarantor" value="no"><span>No</span></label></div></fieldset>
+            <div class="field" id="guarantor-income-field" hidden><label for="guarantor-income">Guarantor’s annual income (USD)</label><p class="helper" id="guarantor-income-help">Enter your guarantor’s annual income before taxes.</p><div class="money-field"><span aria-hidden="true">$</span><input id="guarantor-income" type="number" inputmode="decimal" aria-describedby="guarantor-income-help guarantor-income-error"></div><div class="quick-picks" id="guarantor-quick-picks" aria-label="Guarantor income quick picks"></div><p class="error" id="guarantor-income-error" hidden></p></div>
+            <fieldset class="field"><legend>Which documents do you already have?</legend><p class="helper">Select what you have to pre-check your preparation list.</p><div id="document-options" class="document-options"></div></fieldset>
+            <div class="field broker-field"><label class="switch-label" for="broker-toggle"><span>I’m hiring my own broker</span><input id="broker-toggle" type="checkbox" role="switch"><span class="switch-track" aria-hidden="true"></span></label><p class="helper">Turn off to exclude the sample broker fee.</p></div>
+          </form>
+          <div class="application-output"><div class="results-heading"><h3>Your application paths</h3><p id="income-requirement" class="helper"></p></div><div id="apply-results" class="path-grid" aria-live="polite" aria-atomic="true"></div><div id="apply-estimate-notes"><p class="reference-footnote">Broker fee assumes you hire your own broker. Estimates use sample rules, not a quote.</p><p class="housing-note">Also consider university-affiliated housing or a sublet, which can avoid most screening. Availability varies.</p></div>
+            <section class="surface checklist-card" id="checklist-section" aria-labelledby="checklist-heading"><div class="subsection-heading"><div><p class="eyebrow">GET YOUR DOCUMENTS READY</p><h3 id="checklist-heading">Your preparation checklist</h3></div><button type="button" id="copy-checklist" class="button secondary small">Copy checklist</button></div><p class="helper">Common items plus documents for your eligible sample paths.</p><div id="checklist"></div><p id="copy-status" class="helper" role="status"></p><textarea id="copy-fallback" aria-label="Checklist text to copy" readonly hidden></textarea></section>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer id="sources" tabindex="-1"><p class="eyebrow">SOURCES & LIMITS</p><p id="source-copy"></p><div class="footer-bottom"><span>NYC Rental Navigator <span aria-hidden="true">/</span> Course prototype</span><span>Built for a more informed first step.</span></div></footer>
+  </div>
+  <noscript><p class="noscript">Please enable JavaScript to use this offline prototype.</p></noscript>
+</body>
+</html>
